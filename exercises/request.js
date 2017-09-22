@@ -23,9 +23,22 @@ function getStudents(callback) {
             // Data reception is done, do whatever with it!
             var parsedData = JSON.parse(body);
             var pathToHouseFile = __dirname + '/../house.txt';
-            
+            //console.log(parsedData);
+
             // CODE HERE
-            // fs.readFile(pathToHouseFile, 'utf8'
+            fs.readFile(pathToHouseFile, 'utf8', function(err, result) {
+              if(err) {
+                callback(err);
+              } else {
+                var names =[];
+                parsedData.forEach((character) => {
+                  if(character.house === result) {
+                    names.push(character.name);
+                  }
+                })
+                callback(names);
+              }
+            })
         });
     });
 }

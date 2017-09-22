@@ -41,49 +41,62 @@ function PLACEHOLDER() {};
 // call the callback to initiateParse so that it only runs after parsing is complete
 function initiateParse(callback) {
   // begins the parsing process by reading input
-  fs.readFile(__dirname + '/../input.txt', 'utf8', PLACEHOLDER);
-  
-  // writes output to output file
-  function writeOutput(err, data) {
-    let output = '';
-    for (let i = 0; i < data.length; i++) {
-      output += data[i];
-      if (i !== data.length - 1) {
-        output += '\n';
-      }
-    }
-
-    fs.writeFile(__dirname + '/../output.txt', output, function(err) {
-      if (err) throw err;
-    });
-  };
-  
-  // async function that sums lines and determines if they add up to more than 100
-  function calculateLines(data, cb) {
-    let filteredData = data.map(function(el) {
-      let values = el.split(' ');
-      let isGreaterThanHundred = false;
-      let runningTotal = 0;
-      for (let i = 0; i < values.length; i++) {
-        runningTotal += parseInt(values[i]);
-      }
-      if (runningTotal > 100) {
-        isGreaterThanHundred = true;
-      }
-      return isGreaterThanHundred;
-    });
-    setTimeout(function() {
-      cb(null, filteredData);
-    }, 100);
-  };
-
-  // splits string by line
-  function splitLines(err, data) {
+  fs.readFile(__dirname + '/../input.txt', 'utf8',function(err, data) {
     if (err) throw err;
     let input = data.toString().split('\n');
-    calculateLines(input, PLACEHOLDER);
-  };
+    calculateLines(input, function(err, data) {
+      let output = '';
+      for (let i = 0; i < data.length; i++) {
+        output += data[i];
+        if (i !== data.length - 1) {
+          output += '\n';
+        }
+      }
+
+      fs.writeFile(__dirname + '/../output.txt', output, function(err,result) {
+        if (err) throw err;
+        callback(result);
+      });
+    });
+  });
+
+  // writes output to output file
+  // function writeOutput(err, data) {
+  //   let output = '';
+  //   for (let i = 0; i < data.length; i++) {
+  //     output += data[i];
+  //     if (i !== data.length - 1) {
+  //       output += '\n';
+  //     }
+  //   }
+  //
+  //   fs.writeFile(__dirname + '/../output.txt', output, function(err) {
+  //     if (err) throw err;
+  //   });
+  // };
+
+  // async function that sums lines and determines if they add up to more than 100
+
+  // splits string by line
+
 
 }
 
+function calculateLines(data, cb) {
+  let filteredData = data.map(function(el) {
+    let values = el.split(' ');
+    let isGreaterThanHundred = false;
+    let runningTotal = 0;
+    for (let i = 0; i < values.length; i++) {
+      runningTotal += parseInt(values[i]);
+    }
+    if (runningTotal > 100) {
+      isGreaterThanHundred = true;
+    }
+    return isGreaterThanHundred;
+  });
+  setTimeout(function() {
+    cb(null, filteredData);
+  }, 100);
+};
 module.exports = initiateParse;

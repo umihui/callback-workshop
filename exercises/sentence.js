@@ -21,7 +21,30 @@ function getThirdWord(callback) {
 
 // use the above functions to complete the sentence and pass it to this function's callback
 function getSentence(callback) {
-  // CODE HERE
+  var results = [];
+  var count = 3;
+  getFirstWord(function(result) {
+    results[0] = result;
+    count--;
+    if(count === 0) {
+      callback(results.join(''));
+    }
+  });
+  getSecondWord(function(result) {
+    results[1] = result;
+    count--;
+    if(count === 0) {
+      callback(results.join(''));
+    }
+  });
+  getThirdWord(function(result) {
+    results[2] = result;
+    count--;
+    if(count === 0) {
+      callback(results.join(''));
+    }
+  });
+
 }
 
 module.exports = getSentence;
